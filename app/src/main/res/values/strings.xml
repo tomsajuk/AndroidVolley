@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Volley</string>
     <string name="barcode">Enter Barcode</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="send_name">Send Name</string>
+    <string name="send_barcode">Send Barcode</string>
 </resources>

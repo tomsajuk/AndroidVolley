@@ -25,14 +25,39 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send Request"
-            android:id="@+id/button"
+            android:text="@string/send_barcode"
+            android:id="@+id/cButton"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/cTextView"
+            android:layout_below="@+id/button"
+            android:layout_marginTop="26dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_name"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/name"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send_name"
+            android:id="@+id/nButton"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nTextView"
             android:layout_below="@+id/button"
             android:layout_marginTop="26dp"
             android:layout_alignParentLeft="true"

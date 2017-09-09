@@ -3,6 +3,7 @@ package com.hello.tsk.volley;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,14 +17,18 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 
 public class MainVolleyActivity extends AppCompatActivity implements Response.Listener,
         Response.ErrorListener {
     public static final String REQUEST_TAG = "MainVolleyActivity";
-    private TextView mTextView;
-    private Button mButton;
-    private EditText mEditText;
+    private TextView cTextView;
+    private TextView nTextView;
+    private Button cButton;
+    private Button nButton;
+    private EditText cEditText;
+    private EditText nEditText;
     private RequestQueue mQueue;
     //Context context = getApplicationContext();
 
@@ -32,9 +37,12 @@ public class MainVolleyActivity extends AppCompatActivity implements Response.Li
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_volley);
 
-        mTextView = (TextView) findViewById(R.id.textView);
-        mButton = (Button) findViewById(R.id.button);
-        mEditText = (EditText) findViewById(R.id.barcode);
+        cTextView = (TextView) findViewById(R.id.cTextView);
+        cButton = (Button) findViewById(R.id.cButton);
+        nTextView = (TextView) findViewById(R.id.nTextView);
+        nButton = (Button) findViewById(R.id.nButton);
+        cEditText = (EditText) findViewById(R.id.barcode);
+        nEditText = (EditText) findViewById(R.id.name);
     }
 
     @Override
@@ -43,12 +51,12 @@ public class MainVolleyActivity extends AppCompatActivity implements Response.Li
         // Instantiate the RequestQueue.
 
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+        cButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String code = mEditText.getText().toString();
-                String url = "http://192.168.171.131:8080/search/"+code;
+                String code = cEditText.getText().toString();
+                String url = "http://192.168.0.1:8080/search/code/" + code;
 
                 JsonArrayRequest jsonRequest = new JsonArrayRequest
                         (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -56,14 +64,17 @@ public class MainVolleyActivity extends AppCompatActivity implements Response.Li
                             public void onResponse(JSONArray response) {
                                 // the response is already constructed as a JSONObject!
                                 try {
-                                    mTextView.setText("Response = " + response);
+                                    cTextView.setText("Response = " + response);
                                     JSONObject res = response.getJSONObject(0);
                                     String unitPrice = res.getString("Unit Price");
+                                    //"Product Name" to get product name
+                                    //"Barcode" for barcode no
+                                    //"Category" to know the category
 
-                                    mTextView.setText(mTextView.getText() + "\nUnit Price = " + unitPrice);
+                                    cTextView.setText(cTextView.getText() + "\nUnit Price = " + unitPrice);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    mTextView.setText(e.getMessage());
+                                    cTextView.setText(e.getMessage());
                                 }
                             }
                         }, new Response.ErrorListener() {
@@ -71,7 +82,50 @@ public class MainVolleyActivity extends AppCompatActivity implements Response.Li
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                mTextView.setText(error.getMessage());
+                                cTextView.setText(error.getMessage());
+                            }
+                        });
+
+                Volley.newRequestQueue(getApplicationContext()).add(jsonRequest);
+
+            }
+        });
+
+        nButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name = nEditText.getText().toString();
+                String url = "http://192.168.0.1:8080/search/name/" + name;
+
+                JsonArrayRequest jsonRequest = new JsonArrayRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                            @Override
+                            public void onResponse(JSONArray response) {
+                                // the response is already constructed as a JSONObject!
+                                try {
+                                    nTextView.setText("Response = " + response);
+                                    JSONObject res = response.getJSONObject(0);
+
+                                    String unitPrice = res.getString("Unit Price");
+                                    //"Unit Price" for unitPrice
+                                    //"Rack No" to get the rack no
+                                    //"Shelf No" to get shelf no
+                                    //"Product Name" to get the name of product
+                                    Log.i("Unit Price : ",unitPrice);
+
+                                    nTextView.setText(nTextView.getText() + "\nUnit Price = " + unitPrice);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    nTextView.setText(e.getMessage());
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                                nTextView.setText(error.getMessage());
                             }
                         });
 
@@ -91,14 +145,14 @@ public class MainVolleyActivity extends AppCompatActivity implements Response.Li
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        mTextView.setText(error.getMessage());
+        cTextView.setText(error.getMessage());
     }
 
     @Override
     public void onResponse(Object response) {
-        mTextView.setText("Response is: " + response);
+        cTextView.setText("Response is: " + response);
         try {
-            mTextView.setText(mTextView.getText() + "\n\n" + ((JSONObject) response).getString
+            cTextView.setText(cTextView.getText() + "\n\n" + ((JSONObject) response).getString
                     ("name"));
         } catch (JSONException e) {
             e.printStackTrace();
